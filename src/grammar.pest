@@ -1,0 +1,52 @@
+Program       = _{ SOI ~ (Statement)* ~ Statement? ~ EOI }
+	Statement = _{ Expression | ExpressionInParentheses ~ ";"* }
+
+Expression        = { ExprAtomValue ~ (ExprInfixOp ~ ExprAtomValue)* }
+	ExprAtomValue = _{ UnaryNot* ~ AtomicExpr ~ IsNullPostfix? }
+	UnaryNot      = @{ NotFlag }
+	IsNullPostfix = { ^"is" ~ NotFlag? ~ ^"null" }
+	AtomicExpr    = _{ Literal | ExpressionInParentheses }
+		ExpressionInParentheses = _{ "(" ~ Expression ~ ")" }
+
+Literal          = _{ True | False | Null | Number | String | Column }
+	True         =  { ^"true" }
+	False        =  { ^"false" }
+	Null         =  { ^"null" }
+	Number       = @{ Double | Decimal | Unsigned | Integer }
+		Decimal  = _{ Integer ~ ("." ~ ASCII_DIGIT*) }
+		Double   = _{ Integer ~ ("." ~ ASCII_DIGIT*)? ~ (^"e" ~ Integer) }
+		Integer  = _{ ("+" | "-")? ~ ASCII_DIGIT+ }
+		Unsigned = _{ ASCII_DIGIT+ }
+	String       = @{ DoubleQuotedString | SingleQuotedString }
+		SingleQuotedString = _{ EmptySQString | FullSQString }
+			EmptySQString  = @{ ("'" ~ "'")+ }
+			FullSQString   = @{ "'" ~ (!("'") ~ ANY)* ~ "'" }
+		DoubleQuotedString = _{ EmptyDQString | FullDQString }
+			EmptyDQString  = @{ ("\"" ~ "\"")+ }
+			FullDQString   = @{ "\"" ~ (!("\"") ~ ANY)* ~ "\"" }
+	Column       = @{ "`" ~ ("``" | (!"`" ~ ANY))* ~ "`" }
+
+ExprInfixOp       = _{ Between | ArithInfixOp | CmpInfixOp | Concat | And | Or }
+	Between       = { NotFlag? ~ ^"between" }
+	And           = { ^"and" }
+	Or            = { ^"or" }
+	Concat        = { "||" }
+	ArithInfixOp  = _{ Add | Subtract | Multiply | Divide }
+		Add       = { "+" }
+		Subtract  = { "-" }
+		Multiply  = { "*" }
+		Divide    = { "/" }
+	CmpInfixOp    = _{ NotEq | GtEq | Gt | LtEq | Lt | Eq | Lt | In | Like | Regexp }
+		Eq        = { "=" }
+		Gt        = { ">" }
+		GtEq      = { ">=" }
+		Lt        = { "<" }
+		LtEq      = { "<=" }
+		NotEq     = { "<>" | "!=" }
+		In        = { NotFlag? ~ ^"in" }
+		Like      = { NotFlag? ~ ^"like" }
+		Regexp    = { NotFlag? ~ ^"regexp" }
+
+NotFlag = { ^"not" }
+WHITESPACE = _{ " " | "\t" | NEWLINE }
+COMMENT = _{ "--" ~ (!"\n" ~ ANY)* }
