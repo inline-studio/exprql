@@ -1,4 +1,4 @@
-use super::{ast_node::AstNode, qql_parser::Rule};
+use super::{ast_node::AstNode, exprql_parser::Rule};
 use serde::{Deserialize, Serialize};
 use tsify::Tsify;
 use wasm_bindgen::prelude::*;

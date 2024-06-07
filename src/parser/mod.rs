@@ -2,8 +2,8 @@
 
 use ast_node::*;
 use cfg_if::cfg_if;
+use exprql_parser::*;
 use pest::Parser;
-use qql_parser::*;
 use serde::{Deserialize, Serialize};
 use tsify::Tsify;
 use wasm_bindgen::prelude::*;
@@ -15,7 +15,7 @@ cfg_if! {
 }
 
 pub mod ast_node;
-pub mod qql_parser;
+pub mod exprql_parser;
 pub mod verbs;
 
 #[derive(Tsify, Serialize, Deserialize, Debug)]
@@ -34,7 +34,7 @@ pub fn parse(source: &str) -> Result<ParseResult, String> {
 
     let mut ast = vec![];
 
-    let pairs = match QQLParser::parse(Rule::Program, source) {
+    let pairs = match ExprQLParser::parse(Rule::Program, source) {
         Ok(pairs) => pairs,
         Err(err) => return Err(err.to_string()),
     };

@@ -1,4 +1,4 @@
-use super::{qql_parser::*, verbs::*};
+use super::{exprql_parser::*, verbs::*};
 use serde::{Deserialize, Serialize};
 use tsify::Tsify;
 use wasm_bindgen::prelude::*;

@@ -4,7 +4,7 @@ use pest_derive::Parser;
 
 #[derive(Parser)]
 #[grammar = "grammar.pest"] // relative to src
-pub struct QQLParser;
+pub struct ExprQLParser;
 
 lazy_static! {
     pub static ref PRATT_PARSER: PrattParser<Rule> = {
