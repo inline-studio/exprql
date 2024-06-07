@@ -27,4 +27,4 @@ then to compile
 
 ### Compiling for WASM
 
-`wasm-pack build --target web`
+`wasm-pack build --release --target bundler`
