@@ -27,4 +27,4 @@ then to compile
 
 ### Compiling for WASM
 
-`wasm-pack build --release --target bundler`
+`wasm-pack build --release --target bundler --scope inline-studio`
