@@ -38,7 +38,7 @@ pub enum BinaryVerb {
 pub fn parse_unary_verb(pair: pest::iterators::Pair<Rule>, expr: AstNode) -> AstNode {
     AstNode::UnaryOp {
         verb: match pair.as_rule() {
-            Rule::NotFlag => UnaryVerb::Not,
+            Rule::UnaryNot => UnaryVerb::Not,
             Rule::IsNullPostfix => UnaryVerb::IsNull,
             _ => panic!("unknown unary verb: {}", pair.as_str()),
         },

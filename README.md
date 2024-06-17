@@ -28,3 +28,9 @@ then to compile
 ### Compiling for WASM
 
 `wasm-pack build --release --target bundler --scope inline-studio`
+
+### Publishing NPM package
+
+Compile for WASM, then navigate to `pkg` subdirectory
+
+`npm publish --access=public`
