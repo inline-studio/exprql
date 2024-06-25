@@ -14,6 +14,8 @@ pub enum Literal {
     Column(String),
     String(String),
     Number(f64),
+    List(Vec<AstNode>),
+    LookupList(String),
 }
 
 #[derive(Tsify, Serialize, Deserialize, Debug)]
@@ -23,11 +25,13 @@ pub enum AstNode {
     UnaryOp {
         verb: UnaryVerb,
         expr: Box<AstNode>,
+        inverted: bool,
     },
     BinaryOp {
         verb: BinaryVerb,
         lhs: Box<AstNode>,
         rhs: Box<AstNode>,
+        inverted: bool,
     },
     Literal(Literal),
 }
@@ -36,6 +40,13 @@ pub fn build_ast_from_expr(pairs: pest::iterators::Pairs<Rule>) -> AstNode {
     PRATT_PARSER
         .map_primary(|primary| match primary.as_rule() {
             Rule::Expression => build_ast_from_expr(primary.into_inner()),
+            Rule::List => AstNode::Literal(Literal::List(
+                primary
+                    .into_inner()
+                    .map(|pair| build_ast_from_expr(pair.into_inner()))
+                    .collect(),
+            )),
+            Rule::LookupList => AstNode::Literal(Literal::LookupList(primary.as_str().to_owned())),
 
             Rule::True => AstNode::Literal(Literal::True),
             Rule::False => AstNode::Literal(Literal::False),

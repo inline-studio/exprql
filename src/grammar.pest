@@ -1,5 +1,5 @@
-Program       = _{ SOI ~ (Statement)* ~ Statement? ~ EOI }
-	Statement = _{ Expression | ExpressionInParentheses ~ ";"* }
+Program       = _{ SOI ~ Statement ~ (";" ~ Statement)* ~ ";"? ~ EOI }
+	Statement = _{ Expression | ExpressionInParentheses }
 
 Expression        = { ExprAtomValue ~ (ExprInfixOp ~ ExprAtomValue)* }
 	ExprAtomValue = _{ UnaryNot* ~ AtomicExpr ~ IsNullPostfix? }
@@ -8,7 +8,7 @@ Expression        = { ExprAtomValue ~ (ExprInfixOp ~ ExprAtomValue)* }
 	AtomicExpr    = _{ Literal | ExpressionInParentheses }
 		ExpressionInParentheses = _{ "(" ~ Expression ~ ")" }
 
-Literal          = _{ True | False | Null | Number | String | Column }
+Literal          = _{ True | False | Null | Number | String | Column | LookupList | List }
 	True         =  { ^"true" }
 	False        =  { ^"false" }
 	Null         =  { ^"null" }
@@ -25,6 +25,8 @@ Literal          = _{ True | False | Null | Number | String | Column }
 			EmptyDQString  = @{ ("\"" ~ "\"")+ }
 			FullDQString   = @{ "\"" ~ (!("\"") ~ ANY)* ~ "\"" }
 	Column       = @{ "`" ~ ("``" | (!"`" ~ ANY))* ~ "`" }
+	List         =  { "[" ~ Expression ~ ("," ~ Expression)* ~ "]"}
+	LookupList   = @{ "{" ~ (!("}") ~ ANY)+ ~ "}"}
 
 ExprInfixOp       = _{ Between | ArithInfixOp | CmpInfixOp | Concat | And | Or }
 	Between       = { NotFlag? ~ ^"between" }

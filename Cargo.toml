@@ -1,7 +1,9 @@
 [package]
 name = "exprql"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2021"
+description = "Small language used for user queries, based on SQL expression syntax."
+repository = "https://github.com/inline-studio/exprql"
 
 [lib]
 crate-type = ["cdylib"]
