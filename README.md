@@ -2,6 +2,8 @@
 
 ### Installing
 
+> follow [rustup.rs](https://rustup.rs/) if you do not have rustup installed
+
 `cargo install wasm-pack pest-language-server`
 
 > dependencies will be installed when you build for a target, since they differ per-target

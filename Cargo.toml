@@ -1,6 +1,6 @@
 [package]
 name = "exprql"
-version = "0.2.0"
+version = "0.4.0"
 edition = "2021"
 description = "Small language used for user queries, based on SQL expression syntax."
 repository = "https://github.com/inline-studio/exprql"
@@ -17,10 +17,9 @@ pest_derive = "2.7.10"
 serde = { version = "1.0.203", features = ["derive"] }
 tsify = "0.4.5"
 wasm-bindgen = "0.2.92"
-wee_alloc = { version = "0.4.5", optional = true }
 
 [profile.release]
 lto = true
 
 [features]
-default = ["console_error_panic_hook", "wee_alloc"]
+default = ["console_error_panic_hook"]

@@ -24,7 +24,9 @@ Literal          = _{ True | False | Null | Number | String | Column | LookupLis
 		DoubleQuotedString = _{ EmptyDQString | FullDQString }
 			EmptyDQString  = @{ ("\"" ~ "\"")+ }
 			FullDQString   = @{ "\"" ~ (!("\"") ~ ANY)* ~ "\"" }
-	Column       = @{ "`" ~ ("``" | (!"`" ~ ANY))* ~ "`" }
+	Column       =  { NestedColumn | SingleColumn }
+		SingleColumn = @{ "`" ~ ("``" | (!"`" ~ ANY))* ~ "`" }
+		NestedColumn = @{ SingleColumn ~ "." ~ SingleColumn }
 	List         =  { "[" ~ Expression ~ ("," ~ Expression)* ~ "]"}
 	LookupList   = @{ "{" ~ (!("}") ~ ANY)+ ~ "}"}
 
